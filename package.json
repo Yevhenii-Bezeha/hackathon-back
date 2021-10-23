@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Node.js + pg-promise: JWT Authentication & Authorization",
   "main": "server.js",
+  "type": "module",
   "scripts": {
     "prepare": "husky install",
     "start": "node server.js",
