@@ -1,4 +1,3 @@
-const {findUserById, getUserData, saveUserData} = require('../models');
 const { Pokemon } = require("../models");
 const { sendResponse } = require("../middlewares")
 exports.allAccess = (req, res) => {
@@ -9,7 +8,7 @@ exports.pokemons = async (req, res) => {
     const pokemons = await Pokemon.find();
     let statusMessage;
     let status;
-    if(pokemons.length){
+    if (pokemons.length){
         statusMessage = 'You`ve got all pokemons';
         status = 200;
     } else {
@@ -24,7 +23,7 @@ exports.pokemon = async (req, res) => {
     const pokemon = await Pokemon.findById(id);
     let statusMessage;
     let status;
-    if(pokemon){
+    if (pokemon){
         statusMessage = 'here is your pokemon';
         status = 200;
     } else {
@@ -35,16 +34,12 @@ exports.pokemon = async (req, res) => {
 };
 
 exports.addPokemon = async (req, res) => {
-    console.log('req', req);
 
-    const newPokemon = req.body;
+    const newPokemon ={ ...req.body, userId: req.userId };
     const pokemonAdd = await Pokemon.create(newPokemon);
-    let pokemon;
     let statusMessage;
     let status;
-    if(pokemonAdd){
-        //console.log(pokemon);
-        pokemon = await Pokemon.findById(id);
+    if (pokemonAdd){
         statusMessage = `pokemon ${req.body?.name} is added`;
         status = 200;
     } else {
@@ -52,25 +47,26 @@ exports.addPokemon = async (req, res) => {
         status = 400;
     }
 
-    sendResponse({res, data: pokemon, status, statusMessage})
+    sendResponse({res, data: pokemonAdd, status, statusMessage})
 };
 
 exports.deletePokemon = async (req, res) => {
+console.log('req.params', req.params);
+    const pokemonId = req.params.id;
 
-    const pokemonId = req.query.id;
     let statusMessage;
     let status;
-    const deleted = await Pokemon.findOneAndDelete(pokemonId)
-      .then(deletedDocument => {
-          if(deletedDocument) {
-              statusMessage = 'pokemon is deleted';
-              status = 200;
-          } else {
-              statusMessage = `pokemon ${id} wasn't deleted`;
-              status = 404;
-          }
-          return deletedDocument
-      })
+    console.log('pokemonId', pokemonId);
+    const deleted = await Pokemon.findByIdAndDelete(pokemonId)
+    console.log('deleted', deleted);
+    if (!deleted) {
+        statusMessage = 'pokemon is deleted';
+        status = 200;
+    } else {
+        statusMessage = `pokemon ${id} wasn't deleted`;
+        status = 404;
+    }
+
 
     sendResponse({res, data: deleted, status, statusMessage})
 };

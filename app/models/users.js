@@ -7,6 +7,7 @@ const joiUserSchema = Joi.object({
   email: Joi.string().min(2).required(),
   password: Joi.string().min(2).required(),
   role: Joi.string(),
+  avatar: Joi.string(),
 });
 
 const joiUserUpdateStatusSchema = Joi.object({
@@ -34,7 +35,11 @@ const userSchema = Schema(
     role: {
       type: String,
       default: 'user'
-    }
+    },
+    avatar: {
+      type: String,
+    },
+
   },
   { versionKey: false, timestamps: true }
 );

@@ -14,7 +14,7 @@ module.exports = function (app) {
 
     app.get("/api/pokemons", controller.pokemons);
     app.get("/api/pokemon/:id", controller.pokemon);
-    app.post("/api/pokemons", controller.addPokemon);
+    app.post("/api/pokemons", [authJwt.verifyToken], controller.addPokemon);
     app.delete("/api/pokemon/:id", [authJwt.verifyToken], controller.deletePokemon);
 
     // app.post("/api/pokemons", [authJwt.verifyToken], controller.userAddHabit);
