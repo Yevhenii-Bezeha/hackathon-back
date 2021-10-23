@@ -3,8 +3,8 @@ const { Schema, model } = require('mongoose');
 
 const joiCommentSchema = Joi.object({
   comment: Joi.string().min(2).required(),
-  idUser: Joi.object().required(),
-  idPokemon: Joi.string().required(),
+  userId: Joi.object().required(),
+  pokemonId: Joi.string().required(),
 });
 
 const commentSchema = Schema(
@@ -14,12 +14,12 @@ const commentSchema = Schema(
       required: [true, 'Set comment'],
       minLength: 2,
     },
-    idUser: {
+    userId: {
       type: String,
       required: [true, 'Set idUser for your comment'],
       minLength: 1,
     },
-    idPokemon: {
+    pokemonId: {
       type: String,
       required: [true, 'Set idPokemon for your comment'],
       minLength: 1,

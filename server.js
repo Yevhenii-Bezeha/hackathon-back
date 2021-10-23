@@ -20,21 +20,10 @@ mongoose.connect('mongodb+srv://nastoc4ka:qwaszx@cluster0.cdcnn.mongodb.net/poke
 const app = express();
 app.use(cors());
 app.use(express.json());
-//
-// // parse requests of content-type - application/json
-//app.use(bodyParser.json());
-//
-//parse requests of content-type - application/x-www-form-urlencoded
-//app.use(bodyParser.urlencoded({extended: true}));
-//
-// // simple route
-// app.get("/", (req, res) => {
-//     res.json({message: "Welcome to Pokemon BE application."});
-// });
 
 // routes
 require("./app/routes/auth.routes")(app);
-require("./app/routes/user.routes")(app);
+require("./app/routes/pokemon.routes")(app);
 
 //set port, listen for requests
 const PORT_BE = process.env.PORT || 8080;

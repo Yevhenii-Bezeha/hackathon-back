@@ -36,7 +36,7 @@ exports.signup = async (req, res) => {
 exports.signin = async (req, res) => {
     const { email, password: passwordToCheck } = req.body;
     const user = await User.findOne({ email });
-    console.log(user);
+
     if (!user) {
         return sendResponse({
             res,

@@ -1,6 +1,6 @@
 const { Pokemon, joiPokemonSchema } = require("./pokemons");
 const { User, joiUserSchema } = require("./users");
-const { Comments, joiCommentsSchema } = require("./comments");
+const { Comment, joiCommentsSchema } = require("./comments");
 
 
 module.exports = {
@@ -8,6 +8,6 @@ module.exports = {
     joiPokemonSchema,
     User,
     joiUserSchema,
-    Comments,
+    Comment,
     joiCommentsSchema,
 };
