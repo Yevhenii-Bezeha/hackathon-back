@@ -1,9 +1,17 @@
-const errorMiddleware = (req, res) => {
+import { ErrorMessages, HttpStatuses } from '../common/index.js';
+
+const errorMiddleware = (req, res, next) => {
   const error = res.error;
 
-  return res.send(error.status).json({
-    error: error.message,
-  });
+  if (error) {
+    console.error(error);
+
+    return res.status(error.status || HttpStatuses.ERROR).json({
+      error: error.message || ErrorMessages.COMMON_ERROR,
+    });
+  }
+
+  return next();
 };
 
 export default errorMiddleware;

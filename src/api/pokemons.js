@@ -1,13 +1,31 @@
-import { jwtAuthMiddleware } from '../middlewares/index.js';
+import { jwtAuthMiddleware, responseMiddleware, errorMiddleware } from '../middlewares/index.js';
 import { pokemonsController } from '../controllers/index.js';
 import { PokemonsApi } from '../common/index.js';
 
 const initPockemonsApi = (router) => {
-  router.get(PokemonsApi.ALL, pokemonsController.getPokemons);
-  router.get(PokemonsApi.ONE, pokemonsController.getPokemon);
-  router.post(PokemonsApi.ALL, jwtAuthMiddleware, pokemonsController.addPokemon);
-  router.patch(PokemonsApi.ONE, jwtAuthMiddleware, pokemonsController.editPokemon);
-  router.delete(PokemonsApi.ONE, jwtAuthMiddleware, pokemonsController.deletePokemon);
+  router.get(PokemonsApi.ALL, pokemonsController.getPokemons, responseMiddleware, errorMiddleware);
+  router.get(PokemonsApi.ONE, pokemonsController.getPokemon, responseMiddleware, errorMiddleware);
+  router.post(
+    PokemonsApi.ALL,
+    jwtAuthMiddleware,
+    pokemonsController.addPokemon,
+    responseMiddleware,
+    errorMiddleware,
+  );
+  router.patch(
+    PokemonsApi.ONE,
+    jwtAuthMiddleware,
+    pokemonsController.editPokemon,
+    responseMiddleware,
+    errorMiddleware,
+  );
+  router.delete(
+    PokemonsApi.ONE,
+    jwtAuthMiddleware,
+    pokemonsController.deletePokemon,
+    responseMiddleware,
+    errorMiddleware,
+  );
 
   return router;
 };

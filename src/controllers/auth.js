@@ -1,80 +1,57 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { UserModel } from '../models/index.js';
+import { authConfig } from '../configs/index.js';
+import { ResponseError } from '../helpers/index.js';
+import { ErrorMessages, Messages } from '../common/index.js';
 
 const signIn = async (req, res, next) => {
-  const { email, password: passwordToCheck } = req.body;
-  const user = await UserModel.findOne({ email });
+  try {
+    const { email, password } = req.body;
+    const user = await UserModel.findOne({ email });
 
-  if (!user) {
-    return sendResponse({
-      res,
-      status: 404,
-      statusMessage: 'error',
-      data: {
-        message: 'User wasn`t registered',
-      },
+    if (!user) {
+      throw new ResponseError(ErrorMessages.Users.WRONG_EMAIL);
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      throw new ResponseError(ErrorMessages.Users.WRONG_PASSWORD);
+    }
+
+    const token = jwt.sign({ id: user.id }, authConfig.secret, {
+      expiresIn: TOKEN_EXPIRING_TIME,
     });
-  }
 
-  const passwordIsValid = await bcrypt.compareSync(passwordToCheck, user.password);
-
-  if (!passwordIsValid) {
-    return sendResponse({
-      res,
-      status: 400,
-      statusMessage: 'error',
-      data: {
-        message: 'User or password not valid',
-      },
-    });
-  }
-
-  const accessToken = jwt.sign({ id: user.id }, config.secret, {
-    expiresIn: TOKEN_EXPIRING_TIME,
-  });
-
-  res.data = {
-    res,
-    status: 200,
-    statusMessage: 'successfully login',
-    data: {
+    res.data = {
       name: user.name,
       email: user.email,
-      accessToken,
-    },
-  };
+      token,
+    };
+  } catch (error) {
+    res.error = error;
+  }
 
   return next();
 };
 
 const signUp = async (req, res, next) => {
-  const { email, name, password: passwordToHash } = req.body;
-  const userIsExist = await UserModel.findOne({ email });
+  try {
+    const { email, name, password: passwordToHash } = req.body;
+    const existingUser = await UserModel.findOne({ email });
 
-  if (userIsExist) {
-    return sendResponse({
-      res,
-      status: 409,
-      statusMessage: 'Error',
-      data: {
-        message: 'User with this email already exist',
-      },
-    });
+    if (existingUser) {
+      throw new ResponseError(ErrorMessages.Users.DUBLICATING_EMAIL);
+    }
+
+    const password = await bcrypt.hash(passwordToHash, 8);
+    const newUser = new UserModel({ email, name, password });
+    await newUser.save();
+
+    res.message = Messages.Users.SIGNED_UP_SUCCESSFULLY;
+  } catch (error) {
+    res.error = error;
   }
-
-  const password = await bcrypt.hashSync(passwordToHash, 8);
-  const newUser = new UserModel({ email, name, password });
-  await newUser.save();
-
-  res.data = {
-    res,
-    status: 200,
-    statusMessage: 'User successfully registered',
-    data: {
-      message: 'User successfully registered',
-    },
-  };
 
   return next();
 };
