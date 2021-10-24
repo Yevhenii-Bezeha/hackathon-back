@@ -29,9 +29,11 @@ const signIn = async (req, res, next) => {
     });
 
     res.data = {
-      name: user.name,
+      _id: user._id,
       email: user.email,
-      token,
+      name: user.name,
+      avatar: user.avatar,
+      token
     };
   } catch (error) {
     res.error = error;
@@ -65,6 +67,7 @@ const signUp = async (req, res, next) => {
       _id: user._id,
       email: user.email,
       name: user.name,
+      avatar: user.avatar,
       token
     }
 
