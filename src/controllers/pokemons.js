@@ -49,7 +49,7 @@ const addPokemon = async (req, res, next) => {
   }
 
   try {
-    const newPokemon = { ...req.body, userId: req.userId };
+    const newPokemon = { ...req.body, userId: req.user._id };
     const pockemon = await PokemonModel.create(newPokemon);
 
     if (!pockemon) {
@@ -72,10 +72,6 @@ const editPokemon = async (req, res, next) => {
   try {
     const pokemonId = req.params.id;
     const { userId } = await PokemonModel.findById(pokemonId);
-
-    if (userId !== req.userId) {
-      throw new ResponseError(ErrorMessages.Pokemons.EDITING_ERROR);
-    }
 
     const isEdited = await PokemonModel.findOneAndUpdate(pokemonId, { ...req.body }, { new: true });
 

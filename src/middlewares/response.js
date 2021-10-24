@@ -1,4 +1,5 @@
 const responseMiddleware = (req, res, next) => {
+  console.log(req.user);
   const message = res.message;
   const data = res.data;
 
