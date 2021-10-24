@@ -1,5 +1,5 @@
 import Mongoose from 'mongoose';
-import { ErrorMessages } from '../../common';
+import { ErrorMessages } from '../../common/index.js';
 import { ResponseError } from '../../helpers/index.js';
 
 const checkIdMiddleWare = (model) => async (req, res, next) => {
