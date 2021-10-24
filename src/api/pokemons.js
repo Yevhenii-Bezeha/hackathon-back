@@ -1,7 +1,14 @@
 import { Router } from 'express';
-import { jwtAuthMiddleware, responseMiddleware, errorMiddleware } from '../middlewares/index.js';
+import {
+  jwtAuthMiddleware,
+  responseMiddleware,
+  errorMiddleware,
+  adminPermissionMiddleware,
+  authorPermissionMiddleware,
+} from '../middlewares/index.js';
 import { pokemonsController } from '../controllers/index.js';
 import { PokemonsApi } from '../common/index.js';
+import { PokemonModel } from '../models/index.js';
 
 const initPockemonsApi = () => {
   const router = Router();
@@ -18,6 +25,8 @@ const initPockemonsApi = () => {
   router.patch(
     PokemonsApi.ONE,
     jwtAuthMiddleware,
+    adminPermissionMiddleware,
+    authorPermissionMiddleware(PokemonModel),
     pokemonsController.editPokemon,
     responseMiddleware,
     errorMiddleware,
@@ -25,6 +34,8 @@ const initPockemonsApi = () => {
   router.delete(
     PokemonsApi.ONE,
     jwtAuthMiddleware,
+    adminPermissionMiddleware,
+    authorPermissionMiddleware(PokemonModel),
     pokemonsController.deletePokemon,
     responseMiddleware,
     errorMiddleware,

@@ -1,7 +1,14 @@
 import { Router } from 'express';
 import { CommentsApi } from '../common/index.js';
-import { jwtAuthMiddleware, responseMiddleware, errorMiddleware } from '../middlewares/index.js';
+import {
+  jwtAuthMiddleware,
+  responseMiddleware,
+  errorMiddleware,
+  adminPermissionMiddleware,
+  authorPermissionMiddleware,
+} from '../middlewares/index.js';
 import { commentsController } from '../controllers/index.js';
+import { CommentModel } from '../models/index.js';
 
 const initCommentsApi = () => {
   const router = Router();
@@ -16,6 +23,8 @@ const initCommentsApi = () => {
   router.delete(
     CommentsApi.ONE,
     jwtAuthMiddleware,
+    adminPermissionMiddleware,
+    authorPermissionMiddleware(CommentModel),
     commentsController.deleteComment,
     responseMiddleware,
     errorMiddleware,

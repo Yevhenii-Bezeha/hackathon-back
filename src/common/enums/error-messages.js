@@ -1,5 +1,6 @@
 const ErrorMessages = {
   COMMON_ERROR: 'Server error occured.',
+  WRONG_ID_FORMAT: 'Wrong ID format.',
   Pokemons: {
     EDITING_ERROR: 'Pokemon was not edited.',
     ADDING_ERROR: 'Pokemon was not added.',
