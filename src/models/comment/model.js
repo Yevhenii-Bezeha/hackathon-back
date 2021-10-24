@@ -1,11 +1,5 @@
-const Joi = require('joi');
-const { Schema, model } = require('mongoose');
-
-const joiCommentSchema = Joi.object({
-  comment: Joi.string().min(2).required(),
-  userId: Joi.object().required(),
-  pokemonId: Joi.string().required(),
-});
+import mongoose from 'mongoose';
+const { Schema, model } = mongoose;
 
 const commentSchema = Schema(
   {
@@ -25,12 +19,9 @@ const commentSchema = Schema(
       minLength: 1,
     },
   },
-  { versionKey: false, timestamps: true }
+  { versionKey: false, timestamps: true },
 );
 
-const Comment = model('comment', commentSchema);
+const CommentModel = model('Comment', commentSchema);
 
-module.exports = {
-  Comment,
-  joiCommentSchema,
-};
+export default CommentModel;
