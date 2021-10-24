@@ -1,8 +1,11 @@
+import { Router } from 'express';
 import { jwtAuthMiddleware, responseMiddleware, errorMiddleware } from '../middlewares/index.js';
 import { pokemonsController } from '../controllers/index.js';
 import { PokemonsApi } from '../common/index.js';
 
-const initPockemonsApi = (router) => {
+const initPockemonsApi = () => {
+  const router = Router();
+
   router.get(PokemonsApi.ALL, pokemonsController.getPokemons, responseMiddleware, errorMiddleware);
   router.get(PokemonsApi.ONE, pokemonsController.getPokemon, responseMiddleware, errorMiddleware);
   router.post(

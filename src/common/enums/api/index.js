@@ -1,5 +1,5 @@
 const ApiRoutes = {
-  POKEMONS: '/pockemons',
+  POKEMONS: '/pokemons',
   COMMENTS: '/comments',
   USERS: '/users',
   AUTH: '/auth',
