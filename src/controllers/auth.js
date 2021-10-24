@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import { UserModel } from '../models/index.js';
 import { authConfig } from '../configs/index.js';
 import { ResponseError } from '../helpers/index.js';
+import { TOKEN_EXPIRING_TIME } from '../common/index.js';
 import { ErrorMessages, Messages } from '../common/index.js';
 
 const signIn = async (req, res, next) => {

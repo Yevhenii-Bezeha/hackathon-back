@@ -30,6 +30,6 @@ const userSchema = Schema(
   { versionKey: false, timestamps: true },
 );
 
-const UserModel = model('user', userSchema);
+const UserModel = model('User', userSchema);
 
 export default UserModel;

@@ -8,9 +8,9 @@ const authorPermissionMiddleware = (model) => async (req, res, next) => {
 
   try {
     const modelId = req.params.id;
-    const modelAuthorId = (await model.findById(modelId)).userId
+    const existingModel = await model.findById(modelId);
 
-    if (req.user._id != modelAuthorId) {
+    if (req.user._id != existingModel.userId) {
       throw new ResponseError(ErrorMessages.Users.WRONG_PERMISSION, HttpStatuses.FORBIDDEN);
     }
   } catch (error) {

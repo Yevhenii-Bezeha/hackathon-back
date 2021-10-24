@@ -35,7 +35,7 @@ const getPokemon = async (req, res, next) => {
       throw new ResponseError(ErrorMessages.Pokemons.NOT_FOUND);
     }
 
-    req.data = pokemon;
+    res.data = pokemon;
   } catch (error) {
     res.error = error;
   }
@@ -50,9 +50,9 @@ const addPokemon = async (req, res, next) => {
 
   try {
     const newPokemon = { ...req.body, userId: req.user._id };
-    const pockemon = await PokemonModel.create(newPokemon);
+    const pokemon = await PokemonModel.create(newPokemon);
 
-    if (!pockemon) {
+    if (!pokemon) {
       throw new ResponseError(ErrorMessages.Pokemons.ADDING_ERROR);
     }
 
@@ -71,9 +71,12 @@ const editPokemon = async (req, res, next) => {
 
   try {
     const pokemonId = req.params.id;
-    const { userId } = await PokemonModel.findById(pokemonId);
 
-    const isEdited = await PokemonModel.findOneAndUpdate(pokemonId, { ...req.body }, { new: true });
+    const isEdited = await PokemonModel.findOneAndUpdate(
+      pokemonId,
+      { ...req.body, userId: req.user._id },
+      { new: true },
+    );
 
     if (!isEdited) {
       throw new ResponseError(ErrorMessages.Pokemons.EDITING_ERROR);
@@ -100,7 +103,7 @@ const deletePokemon = async (req, res, next) => {
       throw new ResponseError(ErrorMessages.Pokemons);
     }
 
-    res.message = Messages.Pokemons.DELETED_SUCCESSFULY;
+    res.message = Messages.Pokemons.DELETED_SUCCESSFULLY;
   } catch (error) {
     res.error = error;
   }

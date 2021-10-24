@@ -3,19 +3,24 @@ const { Schema, model } = mongoose;
 
 const pokemonSchema = Schema(
   {
-    comment: {
+    name: {
       type: String,
-      required: [true, 'Set comment'],
+      required: [true, 'Pokemon should have a name.'],
       minLength: 2,
+    },
+    ability: {
+      type: String,
+      required: [true, 'Pokemon should have an ability.'],
+      minLength: 1,
+    },
+    photo: {
+      type: String,
+      required: [true, 'Pokemon should have a photo.'],
+      minLength: 1,
     },
     userId: {
       type: String,
-      required: [true, 'Set idUser for your comment'],
-      minLength: 1,
-    },
-    pokemonId: {
-      type: String,
-      required: [true, 'Set idPokemon for your comment'],
+      required: [true, 'Pokemon should have a photo.'],
       minLength: 1,
     },
   },
