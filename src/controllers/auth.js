@@ -24,7 +24,7 @@ const signIn = async (req, res, next) => {
       throw new ResponseError(ErrorMessages.Users.WRONG_PASSWORD);
     }
 
-    const token = jwt.sign({ id: user.id }, authConfig.secret, {
+    const token = jwt.sign({ id: user._id }, authConfig.secret, {
       expiresIn: TOKEN_EXPIRING_TIME,
     });
 
@@ -57,7 +57,18 @@ const signUp = async (req, res, next) => {
     const user = new UserModel({ email, name, password });
     await user.save();
 
-    res.data = user;
+    const token = jwt.sign({ id: user._id }, authConfig.secret, {
+      expiresIn: TOKEN_EXPIRING_TIME,
+    });
+
+    const authorizedUser = {
+      _id: user._id,
+      email: user.email,
+      name: user.name,
+      token
+    }
+
+    res.data = authorizedUser;
   } catch (error) {
     res.error = error;
   }
