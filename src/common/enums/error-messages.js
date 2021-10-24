@@ -13,6 +13,7 @@ const ErrorMessages = {
   Users: {
     NO_TOKEN: 'A token was not provided.',
     WRONG_TOKEN: 'The wrong token was provided.',
+    WRONG_PERMISSION: 'User has no permission.',
     WRONG_EMAIL: 'Wrong email was provided.',
     WRONG_PASSWORD: 'Wrong password was provided.',
     DUBLICATING_EMAIL: 'User with such email already exists.',
