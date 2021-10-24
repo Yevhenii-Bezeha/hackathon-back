@@ -3,6 +3,10 @@ import { ResponseError } from '../helpers/index.js';
 import { ErrorMessages, Messages } from '../common/index.js';
 
 const getPokemons = async (req, res, next) => {
+  if (res.error) {
+    return next();
+  }
+
   try {
     const pokemons = await PokemonModel.find();
 
@@ -19,6 +23,10 @@ const getPokemons = async (req, res, next) => {
 };
 
 const getPokemon = async (req, res, next) => {
+  if (res.error) {
+    return next();
+  }
+
   try {
     const pockemonId = req.params.id;
     const pokemon = await PokemonModel.findById(pockemonId);
@@ -36,6 +44,10 @@ const getPokemon = async (req, res, next) => {
 };
 
 const addPokemon = async (req, res, next) => {
+  if (res.error) {
+    return next();
+  }
+
   try {
     const newPokemon = { ...req.body, userId: req.userId };
     const pockemon = await PokemonModel.create(newPokemon);
@@ -53,6 +65,10 @@ const addPokemon = async (req, res, next) => {
 };
 
 const editPokemon = async (req, res, next) => {
+  if (res.error) {
+    return next();
+  }
+
   try {
     const pokemonId = req.params.id;
     const { userId } = await PokemonModel.findById(pokemonId);
@@ -76,6 +92,10 @@ const editPokemon = async (req, res, next) => {
 };
 
 const deletePokemon = async (req, res, next) => {
+  if (res.error) {
+    return next();
+  }
+
   try {
     const pokemonId = req.params.id;
     const isDeleted = await PokemonModel.findByIdAndDelete(pokemonId);

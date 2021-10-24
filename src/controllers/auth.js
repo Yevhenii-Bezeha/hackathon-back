@@ -6,6 +6,10 @@ import { ResponseError } from '../helpers/index.js';
 import { ErrorMessages, Messages } from '../common/index.js';
 
 const signIn = async (req, res, next) => {
+  if (res.error) {
+    return next();
+  }
+
   try {
     const { email, password } = req.body;
     const user = await UserModel.findOne({ email });
@@ -36,6 +40,10 @@ const signIn = async (req, res, next) => {
 };
 
 const signUp = async (req, res, next) => {
+  if (res.error) {
+    return next();
+  }
+
   try {
     const { email, name, password: passwordToHash } = req.body;
     const existingUser = await UserModel.findOne({ email });

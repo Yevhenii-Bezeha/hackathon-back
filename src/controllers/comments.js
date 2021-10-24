@@ -3,6 +3,10 @@ import { ResponseError } from '../helpers/index.js';
 import { CommentModel, UserModel } from '../models/index.js';
 
 const addComment = async (req, res, next) => {
+  if (res.error) {
+    return next();
+  }
+
   try {
     const newComment = { ...req.body, userId: req.userId };
     const comment = await Comment.create(newComment);
@@ -20,12 +24,16 @@ const addComment = async (req, res, next) => {
 };
 
 const deleteComment = async (req, res, next) => {
+  if (res.error) {
+    return next();
+  }
+
   try {
     const commentId = req.params.id;
     const { userId } = await CommentModel.findById(commentId);
     const { role } = await UserModel.findById(req.userId);
 
-    if (!(userId === req.userId || role === 'admin')) {
+    if (!(userId === req.user._id || role === 'admin')) {
       throw new ResponseError(ErrorMessages.Comments.DELETING_ERROR);
     }
 

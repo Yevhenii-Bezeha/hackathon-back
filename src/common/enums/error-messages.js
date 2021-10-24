@@ -11,6 +11,8 @@ const ErrorMessages = {
     NOT_FOUND: (id) => `Comment with ID ${id} not found.`,
   },
   Users: {
+    NO_TOKEN: 'A token was not provided.',
+    WRONG_TOKEN: 'The wrong token was provided.',
     WRONG_EMAIL: 'Wrong email was provided.',
     WRONG_PASSWORD: 'Wrong password was provided.',
     DUBLICATING_EMAIL: 'User with such email already exists.',

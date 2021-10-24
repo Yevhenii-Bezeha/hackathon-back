@@ -1,19 +1,31 @@
 import jwt from 'jsonwebtoken';
-import { authConfig } from '../configs/index.js';
+import { ErrorMessages, HttpStatuses } from '../common/index.js';
+import { ResponseError } from '../helpers/index.js';
+import { UserModel } from '../models/index.js';
 
-const jwtAuthMiddleware = (req, res, next) => {
-  let token = req.headers['x-access-token'];
-  if (!token) {
-    return res.status(403).send({ message: 'No token provided!' });
+const jwtAuthMiddleware = async (req, res, next) => {
+  try {
+    const token = req.headers['x-access-token'];
+
+    if (!token) {
+      throw new ResponseError(ErrorMessages.Users.NO_TOKEN, HttpStatuses.FORBIDDEN);
+    }
+
+    let decodedData;
+    jwt.verify(token, config.secret, (error, decoded) => {
+      if (error) {
+        throw new ResponseError(ErrorMessages.Users.WRONG_TOKEN, HttpStatuses.NOT_AUTHORIZED);
+      }
+
+      decodedData = decoded;
+    });
+
+    req.user = await UserModel.findById(decodedData.id);
+  } catch (error) {
+    res.error = error;
   }
 
-  jwt.verify(token, config.secret, (err, decoded) => {
-    if (err) {
-      return res.status(401).send({ message: 'Unauthorized!' });
-    }
-    req.userId = decoded.id;
-    next();
-  });
+  return next();
 };
 
 export default jwtAuthMiddleware;
