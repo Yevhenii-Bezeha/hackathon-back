@@ -1,4 +1,4 @@
-import { PokemonModel } from '../models/index.js';
+import { CommentModel, PokemonModel } from '../models/index.js';
 import { ResponseError } from '../helpers/index.js';
 import { ErrorMessages, Messages } from '../common/index.js';
 
@@ -28,13 +28,17 @@ const getPokemon = async (req, res, next) => {
   }
 
   try {
-    const pockemonId = req.params.id;
-    const pokemon = await PokemonModel.findById(pockemonId);
-
+    const pokemonId = req.params.id;
+    let pokemon = await PokemonModel.findById(pokemonId);
+    const comments = await CommentModel.find({ pokemonId: pokemonId });
+    console.log(comments);
     if (!pokemon) {
       throw new ResponseError(ErrorMessages.Pokemons.NOT_FOUND);
     }
 
+    const { name, ability, photo, userId, updatedAt, _id } = pokemon
+    pokemon = { name, ability, photo, userId, updatedAt, _id, comments };
+    console.log('pokemon', pokemon);
     res.data = pokemon;
   } catch (error) {
     res.error = error;
