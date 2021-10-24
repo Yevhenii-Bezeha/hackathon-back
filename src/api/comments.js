@@ -4,7 +4,6 @@ import {
   jwtAuthMiddleware,
   responseMiddleware,
   errorMiddleware,
-  adminPermissionMiddleware,
   authorPermissionMiddleware,
 } from '../middlewares/index.js';
 import { commentsController } from '../controllers/index.js';
@@ -23,7 +22,6 @@ const initCommentsApi = () => {
   router.delete(
     CommentsApi.ONE,
     jwtAuthMiddleware,
-    adminPermissionMiddleware,
     authorPermissionMiddleware(CommentModel),
     commentsController.deleteComment,
     responseMiddleware,

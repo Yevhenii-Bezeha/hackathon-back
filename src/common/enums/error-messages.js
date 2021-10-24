@@ -8,6 +8,7 @@ const ErrorMessages = {
   },
   Comments: {
     EDITING_ERROR: 'Comment was not edited.',
+    DELETING_ERROR: 'Comment was not deleted.',
     ADDING_ERROR: 'Comment was not added.',
     NOT_FOUND: (id) => `Comment with ID ${id} not found.`,
   },

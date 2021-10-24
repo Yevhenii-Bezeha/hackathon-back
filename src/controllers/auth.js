@@ -4,7 +4,7 @@ import { UserModel } from '../models/index.js';
 import { authConfig } from '../configs/index.js';
 import { ResponseError } from '../helpers/index.js';
 import { TOKEN_EXPIRING_TIME } from '../common/index.js';
-import { ErrorMessages, Messages } from '../common/index.js';
+import { ErrorMessages } from '../common/index.js';
 
 const signIn = async (req, res, next) => {
   if (res.error) {
@@ -54,10 +54,10 @@ const signUp = async (req, res, next) => {
     }
 
     const password = await bcrypt.hash(passwordToHash, 8);
-    const newUser = new UserModel({ email, name, password });
-    await newUser.save();
+    const user = new UserModel({ email, name, password });
+    await user.save();
 
-    res.message = Messages.Users.SIGNED_UP_SUCCESSFULLY;
+    res.data = user;
   } catch (error) {
     res.error = error;
   }

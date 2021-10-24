@@ -56,7 +56,7 @@ const addPokemon = async (req, res, next) => {
       throw new ResponseError(ErrorMessages.Pokemons.ADDING_ERROR);
     }
 
-    res.message = Messages.Pokemons.ADDED_SUCCESSFULLY;
+    res.data = pokemon;
   } catch (error) {
     res.error = error;
   }
@@ -72,17 +72,19 @@ const editPokemon = async (req, res, next) => {
   try {
     const pokemonId = req.params.id;
 
-    const isEdited = await PokemonModel.findOneAndUpdate(
+    const existingPokemon = await PokemonModel.findById(pokemonId).lean();
+    delete existingPokemon._id;
+    const pockemon = await PokemonModel.findOneAndUpdate(
       pokemonId,
-      { ...req.body, userId: req.user._id },
+      { ...req.body, ...existingPokemon },
       { new: true },
     );
 
-    if (!isEdited) {
+    if (!pockemon) {
       throw new ResponseError(ErrorMessages.Pokemons.EDITING_ERROR);
     }
 
-    res.message = Messages.Pokemons.EDITED_SUCCESSFULLY;
+    res.data = pockemon;
   } catch (error) {
     res.error = error;
   }

@@ -1,6 +1,6 @@
 import { ErrorMessages, Messages } from '../common/index.js';
 import { ResponseError } from '../helpers/index.js';
-import { CommentModel, UserModel } from '../models/index.js';
+import { CommentModel } from '../models/index.js';
 
 const addComment = async (req, res, next) => {
   if (res.error) {
@@ -8,14 +8,14 @@ const addComment = async (req, res, next) => {
   }
 
   try {
-    const newComment = { ...req.body, userId: req.userId };
-    const comment = await Comment.create(newComment);
+    const newComment = { ...req.body, userId: req.user._id };
+    const comment = await CommentModel.create(newComment);
 
     if (!comment) {
-      throw new ResponseError(ErrorMessages.Comments.ADDED_SUCCESSFULLY);
+      throw new ResponseError(ErrorMessages.Comments.ADDING_ERROR);
     }
 
-    res.data = Messages.Comments.ADDED_SUCCESSFULLY;
+    res.data = comment;
   } catch (error) {
     res.error = error;
   }
@@ -30,12 +30,6 @@ const deleteComment = async (req, res, next) => {
 
   try {
     const commentId = req.params.id;
-    const { userId } = await CommentModel.findById(commentId);
-    const { role } = await UserModel.findById(req.userId);
-
-    if (!(userId === req.user._id || role === 'admin')) {
-      throw new ResponseError(ErrorMessages.Comments.DELETING_ERROR);
-    }
 
     const isDeleted = await CommentModel.findByIdAndDelete(commentId);
     if (!isDeleted) {

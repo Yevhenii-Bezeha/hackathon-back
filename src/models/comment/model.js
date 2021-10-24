@@ -3,7 +3,7 @@ const { Schema, model } = mongoose;
 
 const commentSchema = Schema(
   {
-    comment: {
+    text: {
       type: String,
       required: [true, 'Set comment'],
       minLength: 2,
